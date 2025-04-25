@@ -4,6 +4,8 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/widgets/info_row.dart';
+import 'package:movie_app/widgets/rating_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -141,13 +143,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    _buildInfoRow("Title", movie.title),
+                                    InfoRow(label: "Title", value: movie.title),
                                     const Divider(),
-                                    _buildInfoRow("Year", movie.year),
+                                    InfoRow(label: "Year", value: movie.year),
                                     const Divider(),
-                                    _buildInfoRow("Rated", movie.rated),
+                                    InfoRow(label: "Rated", value: movie.rated),
                                     const Divider(),
-                                    _buildInfoRow("Runtime", movie.runtime),
+                                    InfoRow(
+                                      label: "Runtime",
+                                      value: movie.runtime,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -191,20 +196,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: _buildRatingCard(
-                                    context,
-                                    "IMDb",
-                                    movie.imdbRating,
-                                    Icons.star,
+                                  child: RatingCard(
+                                    title: "IMDb",
+                                    value: movie.imdbRating,
+                                    icon: Icons.star,
                                   ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
-                                  child: _buildRatingCard(
-                                    context,
-                                    "Rotten Tomatoes",
-                                    movie.rottenTomatoesRating,
-                                    Icons.local_movies,
+                                  child: RatingCard(
+                                    title: "Rotten Tomatoes",
+                                    value: movie.rottenTomatoesRating,
+                                    icon: Icons.local_movies,
                                   ),
                                 ),
                               ],
@@ -223,11 +226,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    _buildInfoRow("Director", movie.director),
+                                    InfoRow(
+                                      label: "Director",
+                                      value: movie.director,
+                                    ),
                                     const Divider(),
-                                    _buildInfoRow("Writer", movie.writer),
+                                    InfoRow(
+                                      label: "Writer",
+                                      value: movie.writer,
+                                    ),
                                     const Divider(),
-                                    _buildInfoRow("Actors", movie.actors),
+                                    InfoRow(
+                                      label: "Actors",
+                                      value: movie.actors,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -246,12 +258,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    _buildInfoRow(
-                                      "Box Office",
-                                      movie.boxOffice,
+                                    InfoRow(
+                                      label: "Box Office",
+                                      value: movie.boxOffice,
                                     ),
                                     const Divider(),
-                                    _buildInfoRow("Awards", movie.awards),
+                                    InfoRow(
+                                      label: "Awards",
+                                      value: movie.awards,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -262,66 +277,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(child: Text(value, style: const TextStyle(fontSize: 16))),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRatingCard(
-    BuildContext context,
-    String title,
-    String value,
-    IconData icon,
-  ) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Icon(icon, size: 32, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
       ),
     );
   }

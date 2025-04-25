@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/screens/home_screen.dart';
-import 'package:movie_app/themes.dart';
+import 'package:movie_app/themes/themes.dart';
 
 void main() {
   runApp(const MyApp());
