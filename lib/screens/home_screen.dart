@@ -51,11 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
         headerSliverBuilder:
             (context, innerBoxIsScrolled) => [
               SliverAppBar(
-                // expandedHeight: 50,
+                expandedHeight: 65,
                 pinned: true,
                 floating: true,
                 title: SizedBox(
-                  height: 40,
+                  height: 45,
                   child: SearchBar(
                     controller: _searchMovieTitle,
                     onChanged: (value) {}, // optional: debounce if you want
@@ -92,12 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     final movie = snapshot.data!;
                     return Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8,
-                        top: 8,
-                        right: 8,
-                        bottom: 20,
-                      ),
+                      padding: const EdgeInsets.all(8),
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,12 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             Align(
                               alignment: Alignment.center,
                               child: Container(
-                                height: 350,
+                                height: 400,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color:
                                         Theme.of(context).colorScheme.primary,
-                                    width: 3,
+                                    width: 1.5,
                                   ),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
