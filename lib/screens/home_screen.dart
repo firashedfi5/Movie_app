@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 45,
                   child: SearchBar(
                     controller: _searchMovieTitle,
-                    onChanged: (value) {}, // optional: debounce if you want
+                    onChanged: (value) {},
                     onSubmitted: (value) => _searchMovie(),
                     backgroundColor: WidgetStateProperty.all(
                       Theme.of(context).colorScheme.onSecondaryFixedVariant,
@@ -74,7 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
         body:
             _movieFuture == null
-                ? const Center(child: Text("Search for a movie above"))
+                ? Center(
+                  child: Text(
+                    "Search for a movie above",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                )
                 : FutureBuilder<MovieModel?>(
                   future: _movieFuture,
                   builder: (context, snapshot) {
@@ -92,253 +97,163 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     final movie = snapshot.data!;
                     return Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(12),
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Align(
-                              alignment: Alignment.center,
+                            Center(
                               child: Container(
-                                height: 400,
+                                height: 450,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 1.5,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.network(movie.poster),
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(
+                                    movie.poster,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: Theme.of(context).dividerColor,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    _buildInfoRow("Title", movie.title),
+                                    const Divider(),
+                                    _buildInfoRow("Year", movie.year),
+                                    const Divider(),
+                                    _buildInfoRow("Rated", movie.rated),
+                                    const Divider(),
+                                    _buildInfoRow("Runtime", movie.runtime),
+                                  ],
                                 ),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Title: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: Theme.of(context).dividerColor,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Plot Summary",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                      ),
                                     ),
-                                  ),
-                                  TextSpan(text: movie.title),
-                                ],
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      movie.plot,
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Year: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildRatingCard(
+                                    context,
+                                    "IMDb",
+                                    movie.imdbRating,
+                                    Icons.star,
                                   ),
-                                  TextSpan(text: movie.year),
-                                ],
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildRatingCard(
+                                    context,
+                                    "Rotten Tomatoes",
+                                    movie.rottenTomatoesRating,
+                                    Icons.local_movies,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: Theme.of(context).dividerColor,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    _buildInfoRow("Director", movie.director),
+                                    const Divider(),
+                                    _buildInfoRow("Writer", movie.writer),
+                                    const Divider(),
+                                    _buildInfoRow("Actors", movie.actors),
+                                  ],
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Rated: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.rated),
-                                ],
+                            const SizedBox(height: 16),
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: Theme.of(context).dividerColor,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Released: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    _buildInfoRow(
+                                      "Box Office",
+                                      movie.boxOffice,
                                     ),
-                                  ),
-                                  TextSpan(text: movie.released),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Runtime: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.runtime),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Genre: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.genre),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Director: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.director),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Writer: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.writer),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Actors: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.actors),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Plot: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.plot),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Country: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.country),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Awards: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.awards),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• IMDb Rating: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.imdbRating),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Rotten Tomatoes Rating: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.rottenTomatoesRating),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                style: const TextStyle(fontSize: 18),
-                                children: [
-                                  const TextSpan(
-                                    text: "• Box Office: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: movie.boxOffice),
-                                ],
+                                    const Divider(),
+                                    _buildInfoRow("Awards", movie.awards),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -347,6 +262,66 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(child: Text(value, style: const TextStyle(fontSize: 16))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRatingCard(
+    BuildContext context,
+    String title,
+    String value,
+    IconData icon,
+  ) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(icon, size: 32, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
