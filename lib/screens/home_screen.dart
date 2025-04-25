@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: WidgetStateProperty.all(
                       Theme.of(context).colorScheme.onSecondaryFixedVariant,
                     ),
-                    hintText: 'Search a movie',
+                    hintText: 'Search for a movie title...',
                     leading: Icon(
                       Icons.search,
                       color: Theme.of(context).colorScheme.primary,
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? Center(
                   child: Text(
                     "Search for a movie above",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 )
                 : FutureBuilder<MovieModel?>(
@@ -94,7 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
 
                     if (!snapshot.hasData || snapshot.data == null) {
-                      return const Center(child: Text('Movie not found'));
+                      return Center(
+                        child: Text(
+                          'Movie not found',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      );
                     }
 
                     final movie = snapshot.data!;
