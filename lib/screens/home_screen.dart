@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Container(
                                 height: 450,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withValues(
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(12),
                                   child: Image.network(
                                     movie.poster,
                                     fit: BoxFit.cover,
