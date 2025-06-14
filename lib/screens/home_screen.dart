@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/widgets/info_row.dart';
@@ -19,7 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<MovieModel?>? _movieFuture;
 
   Future<MovieModel?> fetchMovieInfo(String movieTitle) async {
-    String apiKey = "b2ad6a7f";
+    await dotenv.load(fileName: ".env");
+
+    String? apiKey = dotenv.env['apiKey'];
     final url = Uri.parse(
       "http://www.omdbapi.com/?apikey=$apiKey&t=$movieTitle",
     );
