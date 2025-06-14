@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/generated/l10n.dart';
+import 'package:movie_app/providers/locale_provider.dart';
 import 'package:movie_app/screens/home_screen.dart';
 import 'package:movie_app/themes/themes.dart';
 
@@ -11,11 +15,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: darkTheme,
-      home: const HomeScreen(),
+    return ProviderScope(
+      child: Consumer(
+        builder: (context, ref, child) {
+          final locale = ref.watch(localeProvider);
+          return MaterialApp(
+            locale: locale,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: darkTheme,
+            home: const HomeScreen(),
+          );
+        },
+      ),
     );
   }
 }

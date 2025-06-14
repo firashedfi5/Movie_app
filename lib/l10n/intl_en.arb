@@ -1,0 +1,86 @@
+{
+    "@@locale": "en",
+
+    "searchBar": "Search for a movie...",
+    "@searchBar": {
+        "description": "Hint text in the search bar"
+    },
+
+    "body": "Start searching for a movie by typing its title.",
+    "@body": {
+        "description": "Initial body text before a search"
+    },
+
+    "movieNotFound": "Movie not found",
+    "@movieNotFound": {
+        "description": "Displayed when the movie is not found in the API"
+    },
+
+    "errorMessage": "Error: {error}",
+    "@errorMessage": {
+        "description": "Error message shown when request fails",
+        "placeholders": {
+        "error": {}
+        }
+    },
+
+    "title" : "Title",
+    "@title": {
+        "description": "Title of the movie"
+    },
+    
+    "year" : "Year",
+    "@year": {
+        "description": "Year of the movie"
+    },
+    
+    "rated" : "Rated",
+    "@rated": {
+        "description": "Rating of the movie"
+    },
+    
+    "runtime" : "Runtime",
+    "@runtime": {
+        "description": "Runtime of the movie"
+    },
+
+    "plotSummary": "Plot Summary",
+    "@plotSummary": {
+        "description": "Header for the plot summary section"
+    },
+
+    "imdbRating": "IMDb",
+    "@imdbRating": {
+        "description": "Label for IMDb rating"
+    },
+
+    "rottenTomatoesRating": "Rotten Tomatoes",
+    "@rottenTomatoesRating": {
+        "description": "Label for Rotten Tomatoes rating"
+    },
+
+    "director": "Director",
+    "@director": {
+        "description": "Label for Director info row"
+    },
+
+    "writer": "Writer",
+    "@writer": {
+        "description": "Label for Writer info row"
+    },
+
+    "actors": "Actors",
+    "@actors": {
+        "description": "Label for Actors info row"
+    },
+
+    "boxOffice": "Box Office",
+    "@boxOffice": {
+        "description": "Label for Box Office info row"
+    },
+
+    "awards": "Awards",
+    "@awards": {
+        "description": "Label for Awards info row"
+    }
+}

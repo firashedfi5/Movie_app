@@ -3,19 +3,22 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:movie_app/generated/l10n.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/providers/locale_provider.dart';
 import 'package:movie_app/widgets/info_row.dart';
 import 'package:movie_app/widgets/rating_card.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController _searchMovieTitle = TextEditingController();
   Future<MovieModel?>? _movieFuture;
 
@@ -56,6 +59,54 @@ class _HomeScreenState extends State<HomeScreen> {
         headerSliverBuilder:
             (context, innerBoxIsScrolled) => [
               SliverAppBar(
+                actions: [
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SimpleDialog(
+                                title: const Text('Select Language'),
+                                children: [
+                                  ListTile(
+                                    title: const Text('English'),
+                                    onTap: () {
+                                      ref
+                                          .read(localeProvider.notifier)
+                                          .state = const Locale('en');
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: const Text('العربية'),
+                                    onTap: () {
+                                      ref
+                                          .read(localeProvider.notifier)
+                                          .state = const Locale('ar');
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: const Text('Français'),
+                                    onTap: () {
+                                      ref
+                                          .read(localeProvider.notifier)
+                                          .state = const Locale('fr');
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.language),
+                      );
+                    },
+                  ),
+                ],
                 expandedHeight: 65,
                 pinned: true,
                 floating: true,
@@ -68,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: WidgetStateProperty.all(
                       Theme.of(context).colorScheme.onSecondaryFixedVariant,
                     ),
-                    hintText: 'Search for a movie title...',
+                    hintText: S.of(context).searchBar,
                     leading: Icon(
                       Icons.search,
                       color: Theme.of(context).colorScheme.primary,
@@ -79,12 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
         body:
             _movieFuture == null
-                ? Center(
-                  child: Text(
-                    "Search for a movie above",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                )
+                ? Center(child: Text(S.of(context).body))
                 : FutureBuilder<MovieModel?>(
                   future: _movieFuture,
                   builder: (context, snapshot) {
@@ -97,12 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
 
                     if (!snapshot.hasData || snapshot.data == null) {
-                      return Center(
-                        child: Text(
-                          'Movie not found',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      );
+                      return Center(child: Text(S.of(context).movieNotFound));
                     }
 
                     final movie = snapshot.data!;
@@ -151,14 +192,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    InfoRow(label: "Title", value: movie.title),
-                                    const Divider(),
-                                    InfoRow(label: "Year", value: movie.year),
-                                    const Divider(),
-                                    InfoRow(label: "Rated", value: movie.rated),
+                                    InfoRow(
+                                      label: S.of(context).title,
+                                      value: movie.title,
+                                    ),
                                     const Divider(),
                                     InfoRow(
-                                      label: "Runtime",
+                                      label: S.of(context).year,
+                                      value: movie.year,
+                                    ),
+                                    const Divider(),
+                                    InfoRow(
+                                      label: S.of(context).rated,
+                                      value: movie.rated,
+                                    ),
+                                    const Divider(),
+                                    InfoRow(
+                                      label: S.of(context).runtime,
                                       value: movie.runtime,
                                     ),
                                   ],
@@ -181,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Plot Summary",
+                                      S.of(context).plotSummary,
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -205,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Expanded(
                                   child: RatingCard(
-                                    title: "IMDb",
+                                    title: S.of(context).imdbRating,
                                     value: movie.imdbRating,
                                     icon: Icons.star,
                                   ),
@@ -213,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: RatingCard(
-                                    title: "Rotten Tomatoes",
+                                    title: S.of(context).rottenTomatoesRating,
                                     value: movie.rottenTomatoesRating,
                                     icon: Icons.local_movies,
                                   ),
@@ -235,17 +285,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   children: [
                                     InfoRow(
-                                      label: "Director",
+                                      label: S.of(context).director,
                                       value: movie.director,
                                     ),
                                     const Divider(),
                                     InfoRow(
-                                      label: "Writer",
+                                      label: S.of(context).writer,
                                       value: movie.writer,
                                     ),
                                     const Divider(),
                                     InfoRow(
-                                      label: "Actors",
+                                      label: S.of(context).actors,
                                       value: movie.actors,
                                     ),
                                   ],
@@ -267,12 +317,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   children: [
                                     InfoRow(
-                                      label: "Box Office",
+                                      label: S.of(context).boxOffice,
                                       value: movie.boxOffice,
                                     ),
                                     const Divider(),
                                     InfoRow(
-                                      label: "Awards",
+                                      label: S.of(context).awards,
                                       value: movie.awards,
                                     ),
                                   ],

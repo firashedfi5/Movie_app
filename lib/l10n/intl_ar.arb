@@ -1,0 +1,55 @@
+{
+    "@@locale": "ar",
+
+    "searchBar": "ابحث عن فيلم...",
+    "@searchBar": {},
+
+    "body": "ابدأ في البحث عن فيلم بكتابة عنوانه.",
+    "@body": {},
+
+    "movieNotFound": "لم يتم العثور على الفيلم",
+    "@movieNotFound": {},
+
+    "errorMessage": "خطأ: {error}",
+    "@errorMessage": {
+        "placeholders": {
+            "error": {}
+        }
+    },
+
+    "title" : "العنوان",
+    "@title": {},
+
+    "year" : "السنة",
+    "@year": {},
+
+    "rated" : "تم تقييمه",
+    "@rated": {},
+
+    "runtime" : "وقت التشغيل",
+    "@runtime": {},
+
+    "plotSummary": "ملخص القصة",
+    "@plotSummary": {},
+
+    "imdbRating": "IMDb",
+    "@imdbRating": {},
+
+    "rottenTomatoesRating": "Rotten Tomatoes",
+    "@rottenTomatoesRating": {},
+
+    "director": "المخرج",
+    "@director": {},
+
+    "writer": "الكاتب",
+    "@writer": {},
+
+    "actors": "الممثلون",
+    "@actors": {},
+
+    "boxOffice": "الإيرادات",
+    "@boxOffice": {},
+
+    "awards": "الجوائز",
+    "@awards": {}
+}

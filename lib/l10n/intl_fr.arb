@@ -1,0 +1,56 @@
+{
+    "@@locale": "fr",
+
+    "searchBar": "Recherchez un film...",
+    "@searchBar": {},
+
+    "body": "Commencez à chercher un film en tapant son titre.",
+    "@body": {},
+
+    "movieNotFound": "Film non trouvé",
+    "@movieNotFound": {},
+
+    "errorMessage": "Erreur : {error}",
+    "@errorMessage": {
+        "placeholders": {
+            "error": {}
+        }
+    },
+
+    "title" : "Titre",
+    "@title": {},
+
+    "year" : "Année",
+    "@year": {},
+
+    "rated" : "Noté",
+    "@rated": {},
+
+    "runtime" : "Durée d'exécution",
+    "@runtime": {},
+
+    "plotSummary": "Résumé de l'intrigue",
+    "@plotSummary": {},
+
+    "imdbRating": "IMDb",
+    "@imdbRating": {},
+
+    "rottenTomatoesRating": "Rotten Tomatoes",
+    "@rottenTomatoesRating": {},
+
+    "director": "Réalisateur",
+    "@director": {},
+
+    "writer": "Scénariste",
+    "@writer": {},
+
+    "actors": "Acteurs",
+    "@actors": {},
+
+    "boxOffice": "Box-office",
+    "@boxOffice": {},
+
+    "awards": "Récompenses",
+    "@awards": {}
+
+}
