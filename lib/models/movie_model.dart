@@ -1,58 +1,33 @@
 class MovieModel {
   const MovieModel({
-    required this.poster,
+    required this.id,
     required this.title,
-    required this.year,
-    required this.rated,
-    required this.released,
-    required this.runtime,
-    required this.genre,
-    required this.director,
-    required this.writer,
-    required this.actors,
-    required this.plot,
-    required this.country,
-    required this.awards,
-    required this.imdbRating,
-    required this.rottenTomatoesRating,
-    required this.boxOffice,
+    required this.overview,
+    required this.releaseDate,
+    required this.posterPath,
+    required this.voteAverage,
+    required this.genreIds,
   });
 
-  final String poster;
+  final int id;
   final String title;
-  final String year;
-  final String rated;
-  final String released;
-  final String runtime;
-  final String genre;
-  final String director;
-  final String writer;
-  final String actors;
-  final String plot;
-  final String country;
-  final String awards;
-  final String imdbRating;
-  final String rottenTomatoesRating;
-  final String boxOffice;
+  final String overview;
+  final String releaseDate;
+  final String posterPath;
+  final double voteAverage;
+  final List<int> genreIds;
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(
-      poster: json['Poster'] ?? '',
-      title: json['Title'] ?? '',
-      year: json['Year'] ?? '',
-      rated: json['Rated'] ?? '',
-      released: json['Released'] ?? '',
-      runtime: json['Runtime'] ?? '',
-      genre: json['Genre'] ?? '',
-      director: json['Director'] ?? '',
-      writer: json['Writer'] ?? '',
-      actors: json['Actors'] ?? '',
-      plot: json['Plot'] ?? '',
-      country: json['Country'] ?? '',
-      awards: json['Awards'] ?? '',
-      imdbRating: json['imdbRating'] ?? '',
-      rottenTomatoesRating: json['Ratings'][1]['Value'] ?? '',
-      boxOffice: json['BoxOffice'] ?? '',
+      id: json['id'],
+      title: json['title'] ?? '',
+      overview: json['overview'] ?? '',
+      releaseDate: json['release_date'] ?? '',
+      posterPath: json['poster_path'] ?? '',
+      voteAverage: (json['vote_average'] ?? 0).toDouble(),
+      genreIds: List<int>.from(json['genre_ids'] ?? []),
     );
   }
+
+  String get fullPosterUrl => 'https://image.tmdb.org/t/p/w500$posterPath';
 }

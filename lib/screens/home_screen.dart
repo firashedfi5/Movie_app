@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:movie_app/generated/l10n.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/providers/locale_provider.dart';
@@ -22,23 +23,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController _searchMovieTitle = TextEditingController();
   Future<MovieModel?>? _movieFuture;
 
+  String langUsed() {
+    return Intl.getCurrentLocale();
+  }
+
   Future<MovieModel?> fetchMovieInfo(String movieTitle) async {
     await dotenv.load(fileName: ".env");
-
     String? apiKey = dotenv.env['apiKey'];
-    final url = Uri.parse(
-      "http://www.omdbapi.com/?apikey=$apiKey&t=$movieTitle",
-    );
-    final response = await http.get(url);
 
-    dev.log(response.body.toString());
+    final query = Uri.encodeQueryComponent(movieTitle);
+    final url = Uri.parse(
+      'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query&language=${langUsed()}',
+    );
+
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data['Response'] == 'True') {
-        return MovieModel.fromJson(data);
+      final List results = data['results'];
+      if (results.isNotEmpty) {
+        return MovieModel.fromJson(results[0]);
       } else {
-        dev.log('Movie not found: ${data['Error']}');
+        dev.log('No movies found');
       }
     } else {
       dev.log('Failed to load data: ${response.statusCode}');
@@ -172,7 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: Image.network(
-                                    movie.poster,
+                                    movie.fullPosterUrl,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -199,17 +205,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     const Divider(),
                                     InfoRow(
                                       label: S.of(context).year,
-                                      value: movie.year,
-                                    ),
-                                    const Divider(),
-                                    InfoRow(
-                                      label: S.of(context).rated,
-                                      value: movie.rated,
-                                    ),
-                                    const Divider(),
-                                    InfoRow(
-                                      label: S.of(context).runtime,
-                                      value: movie.runtime,
+                                      value: movie.releaseDate,
                                     ),
                                   ],
                                 ),
@@ -243,7 +239,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ),
                                     const SizedBox(height: 12),
                                     Text(
-                                      movie.plot,
+                                      movie.overview,
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                   ],
@@ -256,78 +252,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Expanded(
                                   child: RatingCard(
                                     title: S.of(context).imdbRating,
-                                    value: movie.imdbRating,
+                                    value: movie.voteAverage.toString(),
                                     icon: Icons.star,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: RatingCard(
-                                    title: S.of(context).rottenTomatoesRating,
-                                    value: movie.rottenTomatoesRating,
-                                    icon: Icons.local_movies,
-                                  ),
-                                ),
                               ],
-                            ),
-                            const SizedBox(height: 16),
-                            Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                  color: Theme.of(context).dividerColor,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  children: [
-                                    InfoRow(
-                                      label: S.of(context).director,
-                                      value: movie.director,
-                                    ),
-                                    const Divider(),
-                                    InfoRow(
-                                      label: S.of(context).writer,
-                                      value: movie.writer,
-                                    ),
-                                    const Divider(),
-                                    InfoRow(
-                                      label: S.of(context).actors,
-                                      value: movie.actors,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                  color: Theme.of(context).dividerColor,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  children: [
-                                    InfoRow(
-                                      label: S.of(context).boxOffice,
-                                      value: movie.boxOffice,
-                                    ),
-                                    const Divider(),
-                                    InfoRow(
-                                      label: S.of(context).awards,
-                                      value: movie.awards,
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                           ],
                         ),
